@@ -1,0 +1,68 @@
+name: Test Suite Reusable Workflow
+
+on:
+  workflow_call:
+    inputs:
+      runner:
+        description: 'GitHub runner to use'
+        required: false
+        type: string
+        default: 'ubuntu-latest'
+      node-version:
+        description: 'Node.js version to use (leave empty to skip Node setup)'
+        required: false
+        type: string
+        default: ''
+      python-version:
+        description: 'Python version to use (leave empty to skip Python setup)'
+        required: false
+        type: string
+        default: ''
+      test-command:
+        description: 'Command to run tests'
+        required: true
+        type: string
+      install-command:
+        description: 'Command to install dependencies'
+        required: false
+        type: string
+        default: 'npm ci'
+      working-directory:
+        description: 'Working directory for commands'
+        required: false
+        type: string
+        default: '.'
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ${{ inputs.runner }}
+    
+    permissions:
+      contents: read
+      pull-requests: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        if: inputs.node-version != ''
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+      
+      - name: Setup Python
+        if: inputs.python-version != ''
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ inputs.python-version }}
+      
+      - name: Install dependencies
+        if: inputs.install-command != ''
+        working-directory: ${{ inputs.working-directory }}
+        run: ${{ inputs.install-command }}
+      
+      - name: Run tests
+        working-directory: ${{ inputs.working-directory }}
+        run: ${{ inputs.test-command }}

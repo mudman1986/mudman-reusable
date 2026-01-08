@@ -1,0 +1,33 @@
+name: 'Checkout with Cache'
+description: 'Checkout repository with configurable options'
+author: 'mudman1986'
+
+inputs:
+  fetch-depth:
+    description: 'Number of commits to fetch. 0 indicates all history'
+    required: false
+    default: '1'
+  submodules:
+    description: 'Whether to checkout submodules'
+    required: false
+    default: 'false'
+  lfs:
+    description: 'Whether to download Git-LFS files'
+    required: false
+    default: 'false'
+  token:
+    description: 'Personal access token (PAT) used to fetch the repository'
+    required: false
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: ${{ inputs.fetch-depth }}
+        submodules: ${{ inputs.submodules }}
+        lfs: ${{ inputs.lfs }}
+        token: ${{ inputs.token || github.token }}
+      shell: bash

@@ -1,0 +1,68 @@
+name: Super-Linter Reusable Workflow
+
+on:
+  workflow_call:
+    inputs:
+      validate-all-codebase:
+        description: 'Validate all codebase or only changed files'
+        required: false
+        type: boolean
+        default: false
+      default-branch:
+        description: 'The default branch name'
+        required: false
+        type: string
+        default: 'main'
+      linter-rules-path:
+        description: 'Directory for linter configuration files'
+        required: false
+        type: string
+        default: '.'
+      filter-regex-exclude:
+        description: 'Regular expression for excluding files/folders'
+        required: false
+        type: string
+        default: ''
+      javascript-es-config-file:
+        description: 'JavaScript ESLint config file'
+        required: false
+        type: string
+        default: '.eslintrc.yml'
+      validate-javascript-standard:
+        description: 'Validate JavaScript with Standard style'
+        required: false
+        type: boolean
+        default: true
+      validate-typescript-standard:
+        description: 'Validate TypeScript with Standard style'
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  super-linter:
+    name: Lint Code Base
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      packages: read
+      statuses: write
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Run Super-Linter
+        uses: super-linter/super-linter@v7
+        env:
+          VALIDATE_ALL_CODEBASE: ${{ inputs.validate-all-codebase }}
+          DEFAULT_BRANCH: ${{ inputs.default-branch }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LINTER_RULES_PATH: ${{ inputs.linter-rules-path }}
+          FILTER_REGEX_EXCLUDE: ${{ inputs.filter-regex-exclude }}
+          JAVASCRIPT_ES_CONFIG_FILE: ${{ inputs.javascript-es-config-file }}
+          VALIDATE_JAVASCRIPT_STANDARD: ${{ inputs.validate-javascript-standard }}
+          VALIDATE_TYPESCRIPT_STANDARD: ${{ inputs.validate-typescript-standard }}
