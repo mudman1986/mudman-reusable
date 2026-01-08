@@ -10,6 +10,7 @@ A collection of reusable GitHub Actions workflows and composite actions to stand
   - [Dependency Review](#dependency-review)
   - [Test Suite](#test-suite)
   - [Docker Build and Push](#docker-build-and-push)
+  - [Release Automation](#release-automation)
 - [Composite Actions](#composite-actions)
   - [Checkout with Cache](#checkout-with-cache)
   - [Setup Node.js with Cache](#setup-nodejs-with-cache)
@@ -213,6 +214,42 @@ jobs:
 |--------|-------------|----------|
 | `registry-username` | Registry username | No (defaults to `github.actor`) |
 | `registry-password` | Registry password or token | No (defaults to `GITHUB_TOKEN`) |
+
+---
+
+### Release Automation
+
+Automatically create GitHub releases with changelog generation when tags are pushed.
+
+**File:** `.github/workflows/reusable-release-automation.yml`
+
+**Usage:**
+
+```yaml
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    uses: mudman1986/mudman-reusable/.github/workflows/reusable-release-automation.yml@main
+    with:
+      create-changelog: true
+      draft: false
+```
+
+**Inputs:**
+
+| Input | Description | Required | Default |
+|-------|-------------|----------|---------|
+| `tag-pattern` | Git tag pattern to trigger release | No | `v*` |
+| `create-changelog` | Automatically generate changelog from commits | No | `true` |
+| `draft` | Create release as draft | No | `false` |
+| `prerelease` | Mark release as prerelease | No | `false` |
+| `release-notes-file` | Path to release notes file (if not auto-generating) | No | `''` |
 
 ---
 

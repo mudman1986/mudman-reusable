@@ -1,0 +1,104 @@
+name: Release Automation Reusable Workflow
+
+on:
+  workflow_call:
+    inputs:
+      tag-pattern:
+        description: 'Git tag pattern to trigger release (e.g., v*)'
+        required: false
+        type: string
+        default: 'v*'
+      create-changelog:
+        description: 'Automatically generate changelog from commits'
+        required: false
+        type: boolean
+        default: true
+      draft:
+        description: 'Create release as draft'
+        required: false
+        type: boolean
+        default: false
+      prerelease:
+        description: 'Mark release as prerelease'
+        required: false
+        type: boolean
+        default: false
+      release-notes-file:
+        description: 'Path to release notes file (if not auto-generating)'
+        required: false
+        type: string
+        default: ''
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      pull-requests: read
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Get version from tag
+        id: get_version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "Version: ${VERSION}"
+      
+      - name: Generate changelog
+        if: inputs.create-changelog
+        id: changelog
+        uses: mikepenz/release-changelog-builder-action@v4
+        with:
+          configuration: |
+            {
+              "template": "#{{CHANGELOG}}\n\n**Full Changelog**: #{{RELEASE_DIFF}}",
+              "categories": [
+                {
+                  "title": "## 🚀 Features",
+                  "labels": ["feature", "enhancement"]
+                },
+                {
+                  "title": "## 🐛 Bug Fixes",
+                  "labels": ["bug", "fix"]
+                },
+                {
+                  "title": "## 📝 Documentation",
+                  "labels": ["documentation", "docs"]
+                },
+                {
+                  "title": "## 🔧 Maintenance",
+                  "labels": ["maintenance", "chore", "dependencies"]
+                }
+              ]
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Read release notes from file
+        if: inputs.release-notes-file != ''
+        id: release_notes
+        run: |
+          if [ -f "${{ inputs.release-notes-file }}" ]; then
+            echo "notes<<EOF" >> $GITHUB_OUTPUT
+            cat "${{ inputs.release-notes-file }}" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.get_version.outputs.version }}
+          name: Release ${{ steps.get_version.outputs.version }}
+          body: ${{ inputs.release-notes-file != '' && steps.release_notes.outputs.notes || steps.changelog.outputs.changelog }}
+          draft: ${{ inputs.draft }}
+          prerelease: ${{ inputs.prerelease }}
+          generate_release_notes: ${{ !inputs.create-changelog && inputs.release-notes-file == '' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
