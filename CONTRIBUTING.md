@@ -104,9 +104,7 @@ All new workflows and actions must include:
    - Input/output table
    - Any prerequisites
 
-2. **Example usage** in the `examples/` directory if applicable
-
-3. **Inline comments** for complex logic
+2. **Inline comments** for complex logic
 
 ## 🔍 Testing Your Contribution
 
@@ -133,8 +131,7 @@ Before submitting:
 2. **Make your changes** following the guidelines above
 3. **Update documentation:**
    - Add your workflow/action to README.md
-   - Create example usage if applicable
-   - Update QUICK_START.md if relevant
+   - Include usage examples in the documentation
 4. **Commit with clear messages:**
    ```
    Add reusable workflow for XYZ
