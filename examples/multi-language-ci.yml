@@ -1,0 +1,87 @@
+# Example Workflow: Multi-Language Project
+
+# This is a complete CI/CD pipeline for projects with multiple languages
+# Place this file in: .github/workflows/ci.yml
+
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # Lint the codebase
+  lint:
+    name: Lint Code
+    uses: mudman1986/mudman-reusable/.github/workflows/reusable-super-linter.yml@main
+    with:
+      validate-all-codebase: false
+      default-branch: main
+
+  # Security scanning with CodeQL for multiple languages
+  security:
+    name: Security Scan
+    uses: mudman1986/mudman-reusable/.github/workflows/reusable-codeql-analysis.yml@main
+    with:
+      languages: '["javascript", "python"]'
+      queries: security-and-quality
+
+  # Review dependencies in pull requests
+  dependency-review:
+    name: Review Dependencies
+    if: github.event_name == 'pull_request'
+    uses: mudman1986/mudman-reusable/.github/workflows/reusable-dependency-review.yml@main
+    with:
+      fail-on-severity: moderate
+
+  # Test JavaScript/TypeScript
+  test-javascript:
+    name: Test JavaScript
+    uses: mudman1986/mudman-reusable/.github/workflows/reusable-test-suite.yml@main
+    with:
+      node-version: '20'
+      test-command: npm test
+      install-command: npm ci
+      working-directory: ./frontend
+
+  # Test Python
+  test-python:
+    name: Test Python
+    uses: mudman1986/mudman-reusable/.github/workflows/reusable-test-suite.yml@main
+    with:
+      python-version: '3.11'
+      test-command: pytest
+      install-command: pip install -r requirements.txt
+      working-directory: ./backend
+
+  # Build frontend Docker image
+  docker-frontend:
+    name: Build Frontend Image
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [lint, security, test-javascript]
+    uses: mudman1986/mudman-reusable/.github/workflows/reusable-docker-build.yml@main
+    with:
+      image-name: ${{ github.repository }}-frontend
+      context: ./frontend
+      dockerfile: ./frontend/Dockerfile
+      platforms: linux/amd64,linux/arm64
+      push: true
+    secrets:
+      registry-password: ${{ secrets.GITHUB_TOKEN }}
+
+  # Build backend Docker image
+  docker-backend:
+    name: Build Backend Image
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [lint, security, test-python]
+    uses: mudman1986/mudman-reusable/.github/workflows/reusable-docker-build.yml@main
+    with:
+      image-name: ${{ github.repository }}-backend
+      context: ./backend
+      dockerfile: ./backend/Dockerfile
+      platforms: linux/amd64,linux/arm64
+      push: true
+    secrets:
+      registry-password: ${{ secrets.GITHUB_TOKEN }}
