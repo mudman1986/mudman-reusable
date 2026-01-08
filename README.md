@@ -2,6 +2,21 @@
 
 A collection of reusable GitHub Actions workflows and composite actions to standardize CI/CD automation across multiple repositories.
 
+## ⚠️ Important: Version Pinning
+
+For security and stability, **always pin to a specific release tag or commit SHA** when using these workflows and actions in production. Using `@main` can expose your CI/CD pipeline to unexpected changes or security vulnerabilities.
+
+**Recommended:**
+```yaml
+uses: mudman1986/mudman-reusable/.github/workflows/reusable-super-linter.yml@v1.0.0  # Pin to release tag
+uses: mudman1986/mudman-reusable/.github/workflows/reusable-super-linter.yml@a1b2c3d  # Pin to commit SHA
+```
+
+**Not recommended for production:**
+```yaml
+uses: mudman1986/mudman-reusable/.github/workflows/reusable-super-linter.yml@main  # Development only
+```
+
 ## 📋 Table of Contents
 
 - [Reusable Workflows](#reusable-workflows)
@@ -38,7 +53,7 @@ on:
 
 jobs:
   lint:
-    uses: mudman1986/mudman-reusable/.github/workflows/reusable-super-linter.yml@main
+    uses: mudman1986/mudman-reusable/.github/workflows/reusable-super-linter.yml@v1.0.0
     with:
       validate-all-codebase: false
       default-branch: main
@@ -52,9 +67,9 @@ jobs:
 | `default-branch` | The default branch name | No | `main` |
 | `linter-rules-path` | Directory for linter configuration files | No | `.` |
 | `filter-regex-exclude` | Regular expression for excluding files/folders | No | `''` |
-| `javascript-es-config-file` | JavaScript ESLint config file | No | `.eslintrc.yml` |
-| `validate-javascript-standard` | Validate JavaScript with Standard style | No | `true` |
-| `validate-typescript-standard` | Validate TypeScript with Standard style | No | `true` |
+| `javascript-es-config-file` | Path to a custom ESLint config used for JavaScript/TypeScript; override this when your project does not use the default `.eslintrc.yml` | No | `.eslintrc.yml` |
+| `validate-javascript-standard` | Enable JavaScript validation using the StandardJS ruleset; set to `false` if you only want to use your own ESLint configuration | No | `true` |
+| `validate-typescript-standard` | Enable TypeScript validation using the StandardJS ruleset; set to `false` if TypeScript is linted exclusively via your custom ESLint configuration | No | `true` |
 
 ---
 
@@ -79,7 +94,7 @@ on:
 
 jobs:
   analyze:
-    uses: mudman1986/mudman-reusable/.github/workflows/reusable-codeql-analysis.yml@main
+    uses: mudman1986/mudman-reusable/.github/workflows/reusable-codeql-analysis.yml@v1.0.0
     with:
       languages: '["javascript", "python"]'
       queries: security-and-quality
@@ -112,7 +127,7 @@ on:
 
 jobs:
   review:
-    uses: mudman1986/mudman-reusable/.github/workflows/reusable-dependency-review.yml@main
+    uses: mudman1986/mudman-reusable/.github/workflows/reusable-dependency-review.yml@v1.0.0
     with:
       fail-on-severity: moderate
       fail-on-scopes: runtime
@@ -148,7 +163,7 @@ on:
 
 jobs:
   test:
-    uses: mudman1986/mudman-reusable/.github/workflows/reusable-test-suite.yml@main
+    uses: mudman1986/mudman-reusable/.github/workflows/reusable-test-suite.yml@v1.0.0
     with:
       node-version: '20'
       test-command: npm test
@@ -186,7 +201,7 @@ on:
 
 jobs:
   docker:
-    uses: mudman1986/mudman-reusable/.github/workflows/reusable-docker-build.yml@main
+    uses: mudman1986/mudman-reusable/.github/workflows/reusable-docker-build.yml@v1.0.0
     with:
       image-name: ${{ github.repository }}
       platforms: linux/amd64,linux/arm64
@@ -235,7 +250,7 @@ on:
 
 jobs:
   release:
-    uses: mudman1986/mudman-reusable/.github/workflows/reusable-release-automation.yml@main
+    uses: mudman1986/mudman-reusable/.github/workflows/reusable-release-automation.yml@v1.0.0
     with:
       create-changelog: true
       draft: false
@@ -265,7 +280,7 @@ Enhanced checkout action with support for submodules and Git LFS.
 
 ```yaml
 steps:
-  - uses: mudman1986/mudman-reusable/.github/actions/checkout-with-cache@main
+  - uses: mudman1986/mudman-reusable/.github/actions/checkout-with-cache@v1.0.0
     with:
       fetch-depth: 0
       submodules: true
@@ -292,7 +307,7 @@ Setup Node.js with automatic dependency caching.
 
 ```yaml
 steps:
-  - uses: mudman1986/mudman-reusable/.github/actions/setup-node-with-cache@main
+  - uses: mudman1986/mudman-reusable/.github/actions/setup-node-with-cache@v1.0.0
     with:
       node-version: '20'
       cache: npm
@@ -319,7 +334,7 @@ Setup Python with automatic dependency caching.
 
 ```yaml
 steps:
-  - uses: mudman1986/mudman-reusable/.github/actions/setup-python-with-cache@main
+  - uses: mudman1986/mudman-reusable/.github/actions/setup-python-with-cache@v1.0.0
     with:
       python-version: '3.11'
       cache: pip
@@ -353,23 +368,23 @@ on:
 
 jobs:
   lint:
-    uses: mudman1986/mudman-reusable/.github/workflows/reusable-super-linter.yml@main
+    uses: mudman1986/mudman-reusable/.github/workflows/reusable-super-linter.yml@v1.0.0
     with:
       validate-all-codebase: false
 
   security:
-    uses: mudman1986/mudman-reusable/.github/workflows/reusable-codeql-analysis.yml@main
+    uses: mudman1986/mudman-reusable/.github/workflows/reusable-codeql-analysis.yml@v1.0.0
     with:
       languages: '["javascript"]'
 
   dependency-review:
     if: github.event_name == 'pull_request'
-    uses: mudman1986/mudman-reusable/.github/workflows/reusable-dependency-review.yml@main
+    uses: mudman1986/mudman-reusable/.github/workflows/reusable-dependency-review.yml@v1.0.0
     with:
       fail-on-severity: moderate
 
   test:
-    uses: mudman1986/mudman-reusable/.github/workflows/reusable-test-suite.yml@main
+    uses: mudman1986/mudman-reusable/.github/workflows/reusable-test-suite.yml@v1.0.0
     with:
       node-version: '20'
       test-command: npm test
@@ -378,7 +393,7 @@ jobs:
   docker:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: [lint, security, test]
-    uses: mudman1986/mudman-reusable/.github/workflows/reusable-docker-build.yml@main
+    uses: mudman1986/mudman-reusable/.github/workflows/reusable-docker-build.yml@v1.0.0
     with:
       image-name: ${{ github.repository }}
       push: true
@@ -397,11 +412,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: mudman1986/mudman-reusable/.github/actions/checkout-with-cache@main
+      - uses: mudman1986/mudman-reusable/.github/actions/checkout-with-cache@v1.0.0
         with:
           fetch-depth: 0
 
-      - uses: mudman1986/mudman-reusable/.github/actions/setup-node-with-cache@main
+      - uses: mudman1986/mudman-reusable/.github/actions/setup-node-with-cache@v1.0.0
         with:
           node-version: '20'
           cache: npm

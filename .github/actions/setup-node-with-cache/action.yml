@@ -28,5 +28,6 @@ runs:
       with:
         node-version: ${{ inputs.node-version }}
         cache: ${{ inputs.cache }}
-        cache-dependency-path: ${{ inputs.cache-dependency-path }}
-        registry-url: ${{ inputs.registry-url }}
+        cache-dependency-path: ${{ inputs.cache-dependency-path != '' && inputs.cache-dependency-path || null }}
+        registry-url: ${{ inputs.registry-url != '' && inputs.registry-url || null }}
+      shell: bash

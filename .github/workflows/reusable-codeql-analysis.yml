@@ -39,6 +39,14 @@ jobs:
         uses: actions/checkout@v4
       
       - name: Initialize CodeQL
+        if: inputs.config-file == ''
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          queries: ${{ inputs.queries }}
+      
+      - name: Initialize CodeQL with config
+        if: inputs.config-file != ''
         uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}

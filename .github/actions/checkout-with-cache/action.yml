@@ -1,5 +1,5 @@
 name: 'Checkout with Cache'
-description: 'Checkout repository with optional dependency caching'
+description: 'Checkout repository with configurable options'
 author: 'mudman1986'
 
 inputs:
@@ -18,7 +18,7 @@ inputs:
   token:
     description: 'Personal access token (PAT) used to fetch the repository'
     required: false
-    default: ${{ github.token }}
+    default: ''
 
 runs:
   using: 'composite'
@@ -29,4 +29,5 @@ runs:
         fetch-depth: ${{ inputs.fetch-depth }}
         submodules: ${{ inputs.submodules }}
         lfs: ${{ inputs.lfs }}
-        token: ${{ inputs.token }}
+        token: ${{ inputs.token || github.token }}
+      shell: bash

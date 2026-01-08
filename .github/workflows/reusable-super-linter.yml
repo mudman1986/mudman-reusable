@@ -56,7 +56,7 @@ jobs:
           fetch-depth: 0
       
       - name: Run Super-Linter
-        uses: super-linter/super-linter@v6
+        uses: super-linter/super-linter@v7
         env:
           VALIDATE_ALL_CODEBASE: ${{ inputs.validate-all-codebase }}
           DEFAULT_BRANCH: ${{ inputs.default-branch }}
