@@ -1,0 +1,32 @@
+name: 'Setup Node.js with Cache'
+description: 'Setup Node.js environment with dependency caching'
+author: 'mudman1986'
+
+inputs:
+  node-version:
+    description: 'Node.js version to use'
+    required: false
+    default: '20'
+  cache:
+    description: 'Package manager for caching (npm, yarn, pnpm)'
+    required: false
+    default: 'npm'
+  cache-dependency-path:
+    description: 'Path to dependency file(s) for cache key'
+    required: false
+    default: ''
+  registry-url:
+    description: 'Optional registry URL to set up for auth'
+    required: false
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: ${{ inputs.cache }}
+        cache-dependency-path: ${{ inputs.cache-dependency-path }}
+        registry-url: ${{ inputs.registry-url }}
