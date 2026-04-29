@@ -23,16 +23,6 @@ on:
         required: false
         type: string
         default: ''
-      validate-javascript-standard:
-        description: 'Validate JavaScript with Standard style'
-        required: false
-        type: boolean
-        default: false
-      validate-typescript-standard:
-        description: 'Validate TypeScript with Standard style'
-        required: false
-        type: boolean
-        default: false
 
 jobs:
   super-linter:
@@ -59,8 +49,6 @@ jobs:
           SAVE_SUPER_LINTER_SUMMARY: true
           FAIL_ON_CONFLICTING_TOOLS_ENABLED: true
           FILTER_REGEX_EXCLUDE: ${{ inputs.filter-regex-exclude }}
-          VALIDATE_JAVASCRIPT_STANDARD: ${{ inputs.validate-javascript-standard }}
-          VALIDATE_TYPESCRIPT_STANDARD: ${{ inputs.validate-typescript-standard }}
           # JSON/YAML
           VALIDATE_JSON: true
           VALIDATE_JSON_PRETTIER: true
@@ -83,7 +71,6 @@ jobs:
           FIX_MARKDOWN_PRETTIER: true
           FIX_YAML_PRETTIER: true
           FIX_JAVASCRIPT_PRETTIER: true
-          FIX_CSS: true
           FIX_CSS_PRETTIER: true
           FIX_HTML_PRETTIER: true
           FIX_NATURAL_LANGUAGE: true
