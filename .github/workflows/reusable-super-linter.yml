@@ -49,6 +49,26 @@ jobs:
           SAVE_SUPER_LINTER_SUMMARY: true
           FAIL_ON_CONFLICTING_TOOLS_ENABLED: true
           FILTER_REGEX_EXCLUDE: ${{ inputs.filter-regex-exclude }}
+          # Shell
+          VALIDATE_BASH: true
+          VALIDATE_BASH_EXEC: true
+          VALIDATE_SHELL_SHFMT: true
+          # Python
+          VALIDATE_PYTHON_BLACK: true
+          VALIDATE_PYTHON_ISORT: true
+          VALIDATE_PYTHON_PYLINT: true
+          VALIDATE_PYTHON_FLAKE8: true
+          VALIDATE_PYTHON_MYPY: true
+          # JavaScript/TypeScript
+          VALIDATE_JAVASCRIPT_ES: true
+          VALIDATE_JAVASCRIPT_PRETTIER: true
+          VALIDATE_TYPESCRIPT_ES: true
+          VALIDATE_TYPESCRIPT_PRETTIER: true
+          # CSS/HTML
+          VALIDATE_CSS: true
+          VALIDATE_CSS_PRETTIER: true
+          VALIDATE_HTML: true
+          VALIDATE_HTML_PRETTIER: true
           # JSON/YAML
           VALIDATE_JSON: true
           VALIDATE_JSON_PRETTIER: true
@@ -71,8 +91,8 @@ jobs:
           FIX_MARKDOWN_PRETTIER: true
           FIX_YAML_PRETTIER: true
           FIX_JAVASCRIPT_PRETTIER: true
+          FIX_CSS: true
           FIX_CSS_PRETTIER: true
           FIX_HTML_PRETTIER: true
           FIX_NATURAL_LANGUAGE: true
           FIX_JAVASCRIPT_ES: true
-          
