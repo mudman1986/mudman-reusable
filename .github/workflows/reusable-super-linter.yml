@@ -48,6 +48,8 @@ jobs:
           LINTER_RULES_PATH: ${{ inputs.linter-rules-path }}
           SAVE_SUPER_LINTER_SUMMARY: true
           FAIL_ON_CONFLICTING_TOOLS_ENABLED: true
+          IGNORE_GENERATED_FILES: true
+          IGNORE_GITIGNORED_FILES: true
           FILTER_REGEX_EXCLUDE: ${{ inputs.filter-regex-exclude }}
           # Shell
           VALIDATE_BASH: true
