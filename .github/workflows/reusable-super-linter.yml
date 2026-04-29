@@ -56,6 +56,36 @@ jobs:
           DEFAULT_BRANCH: ${{ inputs.default-branch }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LINTER_RULES_PATH: ${{ inputs.linter-rules-path }}
+          SAVE_SUPER_LINTER_SUMMARY: true
+          FAIL_ON_CONFLICTING_TOOLS_ENABLED: true
           FILTER_REGEX_EXCLUDE: ${{ inputs.filter-regex-exclude }}
           VALIDATE_JAVASCRIPT_STANDARD: ${{ inputs.validate-javascript-standard }}
           VALIDATE_TYPESCRIPT_STANDARD: ${{ inputs.validate-typescript-standard }}
+          # JSON/YAML
+          VALIDATE_JSON: true
+          VALIDATE_JSON_PRETTIER: true
+          VALIDATE_YAML: true
+          VALIDATE_YAML_PRETTIER: true
+          # Markdown
+          VALIDATE_MARKDOWN: true
+          VALIDATE_MARKDOWN_PRETTIER: true
+          VALIDATE_NATURAL_LANGUAGE: true
+          # GitHub Actions
+          VALIDATE_GITHUB_ACTIONS: true
+          # Security/Quality
+          VALIDATE_GITLEAKS: true
+          VALIDATE_GIT_MERGE_CONFLICT_MARKERS: true
+          # Enable autofix for supported linters
+          FIX_PYTHON_BLACK: true
+          FIX_PYTHON_ISORT: true
+          FIX_SHELL_SHFMT: true
+          FIX_MARKDOWN: true
+          FIX_MARKDOWN_PRETTIER: true
+          FIX_YAML_PRETTIER: true
+          FIX_JAVASCRIPT_PRETTIER: true
+          FIX_CSS: true
+          FIX_CSS_PRETTIER: true
+          FIX_HTML_PRETTIER: true
+          FIX_NATURAL_LANGUAGE: true
+          FIX_JAVASCRIPT_ES: true
+          
