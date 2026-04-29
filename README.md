@@ -53,13 +53,12 @@ jobs:
 
 | Input | Description | Required | Default |
 |-------|-------------|----------|---------|
-| `validate-all-codebase` | Validate all codebase or only changed files | No | `false` |
+| `validate-all-codebase` | Validate all codebase or only changed files | No | `true` |
 | `default-branch` | The default branch name | No | `main` |
 | `linter-rules-path` | Directory for linter configuration files | No | `.` |
 | `filter-regex-exclude` | Regular expression for excluding files/folders | No | `''` |
-| `javascript-es-config-file` | Path to a custom ESLint config used for JavaScript/TypeScript; override this when your project does not use the default `.eslintrc.yml` | No | `.eslintrc.yml` |
-| `validate-javascript-standard` | Enable JavaScript validation using the StandardJS ruleset; set to `false` if you only want to use your own ESLint configuration | No | `true` |
-| `validate-typescript-standard` | Enable TypeScript validation using the StandardJS ruleset; set to `false` if TypeScript is linted exclusively via your custom ESLint configuration | No | `true` |
+| `validate-javascript-standard` | Enable JavaScript validation using the StandardJS ruleset; set to `false` if you only want to use your own ESLint configuration | No | `false` |
+| `validate-typescript-standard` | Enable TypeScript validation using the StandardJS ruleset; set to `false` if TypeScript is linted exclusively via your custom ESLint configuration | No | `false` |
 
 ---
 
