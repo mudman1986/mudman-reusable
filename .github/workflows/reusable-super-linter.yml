@@ -98,3 +98,5 @@ jobs:
           FIX_HTML_PRETTIER: true
           FIX_NATURAL_LANGUAGE: true
           FIX_JAVASCRIPT_ES: true
+          FIX_TYPESCRIPT_ES: true
+          FIX_TYPESCRIPT_PRETTIER: true
